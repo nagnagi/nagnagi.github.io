@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>nagnagi.github.io</title>
+    <style>
+        #title {
+            text-align: center;
+        }
+
+        #bt {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="title"></h1>
+    <hr>
+
+    <div id="bt">
+        <button id="speed-down">&lt;</button>
+        <button id="speed-up">&gt;</button>
+    </div>
+
+    <script>
+        const title = document.getElementById("title");
+        const speedDown = document.getElementById("speed-down");
+        const speedUp = document.getElementById("speed-up");
+
+        const text = "It works!";
+        let now = 0;
+        let intervalId = 0;
+        let intervalTime = 250;
+        const skipList = [2];
+        const colorList = [
+            "#FF0000",
+            "#FFA500",
+            "#FFFF00",
+            "#00FF00",
+            "#008080",
+            "#0000FF",
+            "#800080",
+            "#FFC0CB"
+        ];
+
+        const shiftColor = () => {
+            let html = "";
+            let target = colorList.length - now - 1;
+            for (let i = 0; i < text.length; ++i) {
+                const char = text[i];
+                if (skipList.includes(i)) {
+                    html += `<span>${char}</span>`;
+                    continue;
+                }
+                const color = colorList[target];
+                html += `<span style="color: ${color}">${char}</span>`;
+                target = ++target % colorList.length;
+            }
+            title.innerHTML = html;
+            now = ++now % colorList.length;
+        };
+
+        intervalId = setInterval(shiftColor, intervalTime);
+
+        speedDown.addEventListener("click", () => {
+            clearInterval(intervalId);
+            intervalTime *= 1.5;
+            intervalId = setInterval(shiftColor, intervalTime);
+        });
+        speedUp.addEventListener("click", () => {
+            clearInterval(intervalId);
+            intervalTime /= 1.5;
+            intervalId = setInterval(shiftColor, intervalTime);
+        });
+    </script>
+</body>
+
+</html>
